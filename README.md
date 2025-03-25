@@ -1,4 +1,4 @@
-# Low-code-Agent-
+# AI-Agent-Bundle
 
 This project sets up a local, self-hosted AI chat system using n8n for workflow automation, Ollama for running large language models (LLMs), Redis for chat memory, and Qdrant for vector storage. It’s designed to run in Docker, leveraging GPU acceleration for Ollama, and provides a foundation for building conversational AI applications with persistent context and similarity search capabilities.
 
@@ -21,8 +21,8 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 
 **1. Clone the Repository**
 ```bash
-git clone https://github.com/Azzbo77/Low-code-Agent-
-cd Low-code-Agent-
+git clone https://github.com/Azzbo77/AI-Agent-Bundle
+cd AI-Agent-Bundle
 ```
 **2. Install NVIDIA Container Toolkit (if using GPU)**
 ```bash
