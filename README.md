@@ -101,4 +101,4 @@ sudo ufw allow 6333
 Feel free to fork this repository, submit issues, or send pull requests to improve the setup!
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
