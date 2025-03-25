@@ -1,0 +1,38 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - "5678:5678"  # Expose n8n on port 5678
+    environment:
+      - N8N_HOST=192.168.1.109
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://192.168.1.109:5678/
+      - GENERIC_TIMEZONE=Europe/Berlin
+      - N8N_SECURE_COOKIE=false  # Disable secure cookies for local testing
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./local-files:/files
+
+  ollama:
+    image: ollama/ollama
+    restart: always
+    ports:
+      - "11434:11434"  # Expose Ollama on port 11434
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  n8n_data:
+  ollama_data:
