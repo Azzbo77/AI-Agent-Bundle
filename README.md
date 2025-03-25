@@ -55,7 +55,7 @@ curl -X PUT http://<yourip>:6333/collections/my_collection \
 - Open your browser: http://<hostip>:5678
 - Set up your first workflow (see below).
 
-##Example Workflow
+## Example Workflow
 
 **1. Chat Trigger:** Triggers on incoming chat messages.
 **2. AI Agent (Ollama Chat Mode):**
