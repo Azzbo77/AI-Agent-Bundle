@@ -15,6 +15,7 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
+
   ollama:
     image: ollama/ollama
     restart: always
@@ -31,6 +32,7 @@ services:
       - OLLAMA_HOST=0.0.0.0:11434
     volumes:
       - ollama_data:/root/.ollama
+
   redis:
     image: redis:latest
     restart: always
@@ -40,7 +42,17 @@ services:
       - redis_data:/data
     command: redis-server --appendonly yes
 
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: always
+    ports:
+      - "6333:6333"  # REST API
+      - "6334:6334"  # gRPC (optional)
+    volumes:
+      - qdrant_data:/qdrant/storage
+
 volumes:
   n8n_data:
   ollama_data:
   redis_data:
+  qdrant_data:
