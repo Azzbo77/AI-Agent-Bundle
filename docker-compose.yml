@@ -40,8 +40,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "4.0"  # 4 of 8 cores
-          memory: "8g" # 8GB of 32GB RAM
+          cpus: "4.0"
+          memory: "8g"
         reservations:
           devices:
             - driver: nvidia
@@ -85,6 +85,23 @@ services:
       - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
+    networks:
+      - ai-net
+
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - ai-net
+
+  promtail:
+    image: grafana/promtail:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail-config.yaml:/etc/promtail/docker-config.yaml
+    command: -config.file=/etc/promtail/docker-config.yaml
     networks:
       - ai-net
 
