@@ -26,14 +26,14 @@ services:
     networks:
       - ai-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "-k", "https://localhost:5678/"]  # -k for self-signed cert
+      test: ["CMD", "wget", "--spider", "--no-check-certificate", "https://localhost:5678/"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 30s
 
   ollama:
-    image: ollama/ollama
+    image: ollama-with-curl
     restart: always
     ports:
       - "11434:11434"
