@@ -25,6 +25,12 @@ services:
       - ./certs:/certs
     networks:
       - ai-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-k", "https://localhost:5678/"]  # -k for self-signed cert
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   ollama:
     image: ollama/ollama
@@ -44,6 +50,12 @@ services:
       - ollama_data:/root/.ollama
     networks:
       - ai-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/v1/models"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   redis:
     image: redis:latest
