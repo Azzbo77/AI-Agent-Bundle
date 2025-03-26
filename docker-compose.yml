@@ -45,6 +45,11 @@ services:
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]  # Checks if Redis responds
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   qdrant:
     image: qdrant/qdrant:latest
@@ -54,6 +59,11 @@ services:
       - "6334:6334"  # gRPC (optional)
     volumes:
       - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/"]  # Checks Qdrant’s REST API
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   n8n_data:
