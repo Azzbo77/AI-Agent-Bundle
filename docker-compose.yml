@@ -63,7 +63,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:6333/"]  # Checks Qdrant’s REST API
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
       start_period: 60s
 
 volumes:
