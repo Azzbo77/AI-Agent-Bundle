@@ -7,14 +7,19 @@ services:
     environment:
       - N8N_HOST=192.168.1.109
       - N8N_PORT=5678
-      - N8N_PROTOCOL=http
+      - N8N_PROTOCOL=https
       - NODE_ENV=production
-      - WEBHOOK_URL=http://192.168.1.109:5678/
+      - WEBHOOK_URL=https://192.168.1.109:5678/
       - GENERIC_TIMEZONE=Europe/Berlin
-      - N8N_SECURE_COOKIE=false
+      - N8N_SECURE_COOKIE=true
+      - N8N_SSL_KEY=/certs/n8n-key.pem
+      - N8N_SSL_CERT=/certs/n8n-cert.pem
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true  # Optional
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
+      - ./certs:/certs  # Relative path to certs folder in same directory as docker-compose.yml
+  # ... (other services unchanged)
 
   ollama:
     image: ollama/ollama
