@@ -5,11 +5,15 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 ## Features
 
 - Chat Interface: Trigger workflows via chat messages in n8n.
-- AI Model: Uses Ollama with models like llama3.1:8b (~4.7 GB, tool-supporting) for chat responses.
+- AI Model: Uses Ollama with models like llama3.1:8b (~4.7 GB, tool-supporting) for chat responses, with resource limits for stability.
 - Memory: Stores conversation history in Redis for context-aware responses.
 - Vector Storage: Saves embeddings in Qdrant for similarity search or long-term memory.
 - Local Deployment: Runs entirely on your machine with Docker, no cloud dependencies.
 - Secure Access: n8n runs over HTTPS with self-signed certificates (configurable for external access).
+- Logging: Centralized log collection with Loki and Promtail for debugging and monitoring.
+- Visualization: Grafana dashboard for viewing logs in a browser-based interface.
+
+## Prerequisites
 
 ## Prerequisites
 
@@ -18,6 +22,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 - Hardware: At least 16 GB RAM, 8 GB VRAM if using GPU, and 20 GB free disk space.
 - OS: Tested on Linux (e.g., Ubuntu); should work on macOS/Windows with Docker adjustments.
 - OpenSSL: Required to generate self-signed certificates for HTTPS.
+- Ports: Ensure 5678 (n8n), 11434 (ollama), 6379 (redis), 6333-6334 (qdrant), 3100 (loki), and 3000 (grafana) are available.
 
 ## Setup Instructions
 
@@ -74,7 +79,15 @@ curl -X PUT http://<your-host-ip>:6333/collections/my_collection \
   -H "Content-Type: application/json" \
   -d '{"vectors": {"size": 4096, "distance": "Cosine"}}'
 ```
-**8. Access n8n**
+
+**8. Set Up Logging and Visualization**
+- Logging is handled by Loki and Promtail, configured via loki-config.yaml and promtail-config.yaml in the project root.
+- Grafana provides a UI at http://<your-host-ip>:3000:
+  1. Login: admin / <your_secure_password> (set in .env or defaults to admin).
+  2. Add Loki data source: URL http://loki:3100.
+  3. Explore logs with queries like {container="ollama-n8n-compose-ollama-1"}.
+
+**9. Access n8n**
 - Open your browser: https://<your-host-ip>:5678
 - Accept the self-signed certificate warning.
 - Set up your first workflow (see below).
@@ -111,16 +124,24 @@ sudo docker compose logs n8n
 sudo docker compose logs ollama
 sudo docker compose logs redis
 sudo docker compose logs qdrant
+sudo docker compose logs loki
+sudo docker compose logs promtail
 ```
-- Firewall: Ensure ports 5678, 11434, 6379, and 6333 are open:
+- View Logs in Grafana: Visit http://<your-host-ip>:3000, use Loki data source, query {container="service-name"}.
+- Firewall: Ensure ports 5678, 11434, 6379, 6333-6334, 3100, and 3000 are open:
+
 ```bash
 sudo ufw allow 5678
 sudo ufw allow 11434
 sudo ufw allow 6379
 sudo ufw allow 6333
+sudo ufw allow 6334
+sudo ufw allow 3100
+sudo ufw allow 3000
 ```
 
 - HTTPS Issues: Verify certificates are in certs/ and paths match .env values.
+- Resource Limits: If ollama slows down, adjust cpus/memory in docker-compose.yml.
 
 ##  Contributing
 Feel free to fork this repository, submit issues, or send pull requests to improve the setup!
