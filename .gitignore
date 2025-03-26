@@ -1,0 +1,27 @@
+# Certificates and keys
+certs/
+n8n-key.pem
+n8n-cert.pem
+
+# Docker volumes and local data
+n8n_data/
+ollama_data/
+redis_data/
+qdrant_data/
+
+# Local files mounted in n8n
+local-files/
+
+# Environment files
+.env
+
+# Docker Compose runtime files
+docker-compose.override.yml
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDE-specific files
+.vscode/
+.idea/
