@@ -123,3 +123,4 @@ volumes:
   ollama_data:
   redis_data:
   qdrant_data:
+  grafana_data:
