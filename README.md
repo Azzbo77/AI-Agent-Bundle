@@ -15,8 +15,6 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 
 ## Prerequisites
 
-## Prerequisites
-
 - Docker: Installed and running (with Docker Compose support).
 - NVIDIA GPU: Optional but recommended for Ollama (requires NVIDIA Container Toolkit).
 - Hardware: At least 16 GB RAM, 8 GB VRAM if using GPU, and 20 GB free disk space.
