@@ -9,6 +9,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 - Memory: Stores conversation history in Redis for context-aware responses.
 - Vector Storage: Saves embeddings in Qdrant for similarity search or long-term memory.
 - Local Deployment: Runs entirely on your machine with Docker, no cloud dependencies.
+- Secure Access: n8n runs over HTTPS with self-signed certificates (configurable for external access).
 
 ## Prerequisites
 
@@ -16,6 +17,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 - NVIDIA GPU: Optional but recommended for Ollama (requires NVIDIA Container Toolkit).
 - Hardware: At least 16 GB RAM, 8 GB VRAM if using GPU, and 20 GB free disk space.
 - OS: Tested on Linux (e.g., Ubuntu); should work on macOS/Windows with Docker adjustments.
+- OpenSSL: Required to generate self-signed certificates for HTTPS.
 
 ## Setup Instructions
 
@@ -35,24 +37,46 @@ sudo apt-get install -y nvidia-container-toolkit
 sudo nvidia-ctk runtime configure --runtime=docker
 sudo systemctl restart docker
 ```
-**3. Start the Containers**
+
+**3. Generate Self-Signed Certificates for HTTPS**
+```bash
+mkdir -p certs
+cd certs
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout n8n-key.pem -out n8n-cert.pem \
+  -subj "/C=US/ST=State/L=City/O=Home/CN=<your-host-ip>"
+cd ..
+```
+- Replace <your-host-ip> with your host IP (e.g., 192.168.1.11).
+
+**4. Configure Environment Variables**
+```bash
+Copy the example .env file and edit it:
+cp .env.example .env
+nano .env
+```
+- Update N8N_HOST and WEBHOOK_URL with your host IP (e.g., 192.168.1.11).
+
+**5. Start the Containers**
 ```bash
 sudo docker compose up -d
 ```
-**4. Pull the Ollama Model**
+
+**6. Pull the Ollama Model**
 - Download the llama3.1:8b model (~4.7 GB, supports tools):
 ```bash
 sudo docker exec -it ollama-n8n-chat-ollama-1 ollama pull llama3.1:8b
 ```
-**5. Configure Qdrant Collection**
+**7. Configure Qdrant Collection**
 - Create a collection for vector storage (assuming 4096 dimensions for llama3.1):
 ```bash
 curl -X PUT http://<yourip>:6333/collections/my_collection \
   -H "Content-Type: application/json" \
   -d '{"vectors": {"size": 4096, "distance": "Cosine"}}'
 ```
-**6. Access n8n**
-- Open your browser: http://<hostip>:5678
+**8. Access n8n**
+- Open your browser: https://<your-host-ip>:5678
+- Accept the self-signed certificate warning.
 - Set up your first workflow (see below).
 
 ## Example Workflow
@@ -76,7 +100,7 @@ Test by sending "hello" in the n8n chat interface.
 
 ## Usage
 
-- **Chat:** Send messages to http://<hostip>:5678/webhook/chat (configure webhook as needed).
+- **Chat:** Send messages to https://<your-host-ip>:5678/webhook/chat (configure webhook as needed).
 - **Memory:** Conversation history is stored in Redis.
 - **Vectors:** Embeddings are saved in Qdrant’s my_collection for similarity search.
 
