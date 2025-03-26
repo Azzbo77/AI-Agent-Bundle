@@ -60,7 +60,7 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/healthz"]  # Checks Qdrant’s REST API
+      test: ["CMD-SHELL", "nc -z localhost 6333 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
