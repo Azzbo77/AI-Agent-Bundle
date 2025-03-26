@@ -19,12 +19,6 @@ services:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
       - ./certs:/certs
- 
-volumes:
-  n8n_data:
-  ollama_data:
-  redis_data:
-  qdrant_data:
 
   ollama:
     image: ollama/ollama
