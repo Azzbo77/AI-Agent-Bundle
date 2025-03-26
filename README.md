@@ -50,8 +50,8 @@ cd ..
 - Replace <your-host-ip> with your host IP (e.g., 192.168.1.11).
 
 **4. Configure Environment Variables**
+- Copy the example .env file and edit it
 ```bash
-Copy the example .env file and edit it:
 cp .env.example .env
 nano .env
 ```
@@ -65,12 +65,12 @@ sudo docker compose up -d
 **6. Pull the Ollama Model**
 - Download the llama3.1:8b model (~4.7 GB, supports tools):
 ```bash
-sudo docker exec -it ollama-n8n-chat-ollama-1 ollama pull llama3.1:8b
+sudo docker exec -it ollama ollama pull llama3.1:8b
 ```
 **7. Configure Qdrant Collection**
 - Create a collection for vector storage (assuming 4096 dimensions for llama3.1):
 ```bash
-curl -X PUT http://<yourip>:6333/collections/my_collection \
+curl -X PUT http://<your-host-ip>:6333/collections/my_collection \
   -H "Content-Type: application/json" \
   -d '{"vectors": {"size": 4096, "distance": "Cosine"}}'
 ```
@@ -107,19 +107,20 @@ Test by sending "hello" in the n8n chat interface.
 ## Troubleshooting
 - Check Logs:
 ```bash
-sudo docker logs ollama-n8n-chat-n8n-1
-sudo docker logs ollama-n8n-chat-ollama-1
-sudo docker logs ollama-n8n-chat-redis-1
-sudo docker logs ollama-n8n-chat-qdrant-1
+sudo docker compose logs n8n
+sudo docker compose logs ollama
+sudo docker compose logs redis
+sudo docker compose logs qdrant
 ```
 - Firewall: Ensure ports 5678, 11434, 6379, and 6333 are open:
-bash
-```
+```bash
 sudo ufw allow 5678
 sudo ufw allow 11434
 sudo ufw allow 6379
 sudo ufw allow 6333
 ```
+
+- HTTPS Issues: Verify certificates are in certs/ and paths match .env values.
 
 ##  Contributing
 Feel free to fork this repository, submit issues, or send pull requests to improve the setup!
