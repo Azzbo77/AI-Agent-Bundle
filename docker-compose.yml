@@ -98,6 +98,17 @@ services:
     networks:
       - ai-net
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # Change this!
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - ai-net
+
   promtail:
     image: grafana/promtail:latest
     volumes:
