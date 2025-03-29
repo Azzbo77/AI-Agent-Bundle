@@ -20,6 +20,9 @@ services:
       - N8N_SSL_CERT=${N8N_SSL_CERT}
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       - N8N_LOG_LEVEL=info
+      - QUEUE_BULL_REDIS_HOST=redis
+      - QUEUE_BULL_REDIS_PORT=6379
+      - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
