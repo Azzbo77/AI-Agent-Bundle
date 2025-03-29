@@ -25,7 +25,12 @@ services:
       - ./local-files:/files
       - ./certs:/certs:ro
     networks:
-      - ai-net
+      - ai-net    
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
     healthcheck:
       test: ["CMD", "wget", "--spider", "--no-check-certificate", "https://n8n:5678/health"]
       interval: 10s
