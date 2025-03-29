@@ -90,6 +90,7 @@ services:
 
   loki:
     image: grafana/loki:latest
+    restart: always
     ports:
       - "3100:3100"
     volumes:
@@ -100,6 +101,7 @@ services:
 
   grafana:
     image: grafana/grafana:latest
+    restart: always
     ports:
       - "3000:3000"
     environment:
@@ -111,6 +113,7 @@ services:
 
   promtail:
     image: grafana/promtail:latest
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./promtail-config.yaml:/etc/promtail/docker-config.yaml
