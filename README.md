@@ -6,7 +6,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 
 - Chat Interface: Trigger workflows via chat messages in n8n.
 - AI Model: Uses Ollama with models like llama3.1:8b (~4.7 GB, tool-supporting) for chat responses, with resource limits for stability.
-- Memory: Stores conversation history in Redis for context-aware responses.
+- Memory: Redis for conversation history, optimized with RDB persistence for faster startup.
 - Vector Storage: Saves embeddings in Qdrant for similarity search or long-term memory.
 - Local Deployment: Runs entirely on your machine with Docker, no cloud dependencies.
 - Secure Access: n8n runs over HTTPS with self-signed certificates (configurable for external access).
