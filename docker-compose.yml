@@ -55,9 +55,9 @@ services:
               capabilities: [gpu]
     environment:
       - OLLAMA_HOST=0.0.0.0
+      - OLLAMA_NUM_PARALLEL=2 
     volumes:
       - ollama_data:/root/.ollama
-      - OLLAMA_NUM_PARALLEL=2 
     networks:
       - ai-net
     healthcheck:
