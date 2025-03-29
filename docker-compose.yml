@@ -93,10 +93,10 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
     deploy:
-    resources:
-      limits:
-        cpus: "0.5"
-        memory: "1G"
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "1G"
     networks:
       - ai-net
 
