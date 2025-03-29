@@ -40,7 +40,7 @@ services:
 
   ollama:
     image: ollama-with-curl
-    restart: always
+    restart: unless-stopped
     ports:
       - "11434:11434"
     deploy:
@@ -54,13 +54,14 @@ services:
               count: 1
               capabilities: [gpu]
     environment:
-      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_HOST=0.0.0.0
     volumes:
       - ollama_data:/root/.ollama
+      - OLLAMA_NUM_PARALLEL=2 
     networks:
       - ai-net
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/v1/models"]
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
       interval: 10s
       timeout: 5s
       retries: 5
