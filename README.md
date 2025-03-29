@@ -82,8 +82,12 @@ curl -X PUT http://<your-host-ip>:6333/collections/my_collection \
 - Logging is handled by Loki and Promtail, configured via loki-config.yaml and promtail-config.yaml in the project root.
 - Grafana provides a UI at http://<your-host-ip>:3000:
   1. Login: admin / <your_secure_password> (set in .env or defaults to admin).
-  2. Add Loki data source: URL http://loki:3100.
-  3. Explore logs with queries like {container="ollama-n8n-compose-ollama-1"}.
+  2. Add Loki data source: http://loki:3100 → “Save & Test.”
+  3. Explore logs: Query {container=~".+"} or {container="ollama-n8n-compose-ollama-1"} in “Explore.”
+  4. Dashboard: Create “AI Agent Logs”:
+     - Add visualization → Loki → Query: {container=~".+"}.
+     - Set visualization to “Logs.”
+     - Save as “AI Agent Logs.”
 
 **9. Access n8n**
 - Open your browser: https://<your-host-ip>:5678
@@ -114,20 +118,19 @@ Test by sending "hello" in the n8n chat interface.
 - **Chat:** Send messages to https://<your-host-ip>:5678/webhook/chat (configure webhook as needed).
 - **Memory:** Conversation history is stored in Redis.
 - **Vectors:** Embeddings are saved in Qdrant’s my_collection for similarity search.
+- **Monitoring:** View logs in Grafana (http:/<your-host-ip>/:3000) with queries like {container="ollama-n8n-compose-ollama-1"}.
 
 ## Troubleshooting
-- Check Logs:
+- **Check Logs:**
 ```bash
-sudo docker compose logs n8n
-sudo docker compose logs ollama
-sudo docker compose logs redis
-sudo docker compose logs qdrant
-sudo docker compose logs loki
-sudo docker compose logs promtail
+sudo docker compose logs <service>
 ```
-- View Logs in Grafana: Visit http://<your-host-ip>:3000, use Loki data source, query {container="service-name"}.
-- Firewall: Ensure ports 5678, 11434, 6379, 6333-6334, 3100, and 3000 are open:
-
+- **Grafana:** 
+   - Check docker logs ollama-n8n-compose-grafana-1 if login fails.
+   - Remove data source: “Data Sources” → Select “Loki” → “Delete” at bottom.
+- **Loki Query Error:** Use {container=~".+"} instead of {container=~".*"}.
+- **Dashboard Error:** If “Data is missing a number field,” switch visualization to “Logs.”
+- **Firewall:** Ensure ports 5678, 11434, 6379, 6333-6334, 3100, and 3000 are open:
 ```bash
 sudo ufw allow 5678
 sudo ufw allow 11434
@@ -138,8 +141,8 @@ sudo ufw allow 3100
 sudo ufw allow 3000
 ```
 
-- HTTPS Issues: Verify certificates are in certs/ and paths match .env values.
-- Resource Limits: If ollama slows down, adjust cpus/memory in docker-compose.yml.
+- **HTTPS Issues:** Verify certificates are in certs/ and paths match .env values.
+- **Resource Limits:** If ollama slows down, adjust cpus/memory in docker-compose.yml.
 
 ##  Contributing
 Feel free to fork this repository, submit issues, or send pull requests to improve the setup!
