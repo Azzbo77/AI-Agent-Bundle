@@ -4,8 +4,8 @@ networks:
 
 services:
   n8n:
-    image: docker.n8n.io/n8nio/n8n
-    restart: always
+    image: docker.n8n.io/n8nio/n8n:latest
+    restart: unless-stopped
     ports:
       - "${N8N_PORT}:${N8N_PORT}"
     environment:
@@ -19,10 +19,11 @@ services:
       - N8N_SSL_KEY=${N8N_SSL_KEY}
       - N8N_SSL_CERT=${N8N_SSL_CERT}
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+       - N8N_LOG_LEVEL=info
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
-      - ./certs:/certs
+      - ./certs:/certs:ro
     networks:
       - ai-net
     healthcheck:
