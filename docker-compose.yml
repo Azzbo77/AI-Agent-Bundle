@@ -20,6 +20,10 @@ services:
       - N8N_SSL_CERT=${N8N_SSL_CERT}
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
       - N8N_LOG_LEVEL=info
+        # Redis config for all n8n usage
+      - N8N_REDIS_HOST=redis
+      - N8N_REDIS_PORT=6379
+      - N8N_REDIS_PASSWORD=${REDIS_PASSWORD}
       - QUEUE_BULL_REDIS_HOST=redis
       - QUEUE_BULL_REDIS_PORT=6379
       - QUEUE_BULL_REDIS_PASSWORD=${REDIS_PASSWORD}
