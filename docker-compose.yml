@@ -68,19 +68,24 @@ services:
       start_period: 30s
 
   redis:
-    image: redis:latest
-    restart: always
+    image: redis:alpine
+    restart: unless-stopped
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    command: redis-server --save 60 1 --appendonly no
+    command: redis-server --save 60 1 --appendonly no --requirepass ${REDIS_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "256M"
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s  # Reduced from 60s
+      start_period: 10s  
     networks:
       - ai-net
 
