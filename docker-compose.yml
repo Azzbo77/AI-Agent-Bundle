@@ -70,8 +70,6 @@ services:
   redis:
     image: redis:alpine
     restart: unless-stopped
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
     command: redis-server --save 60 1 --appendonly no --requirepass ${REDIS_PASSWORD}
