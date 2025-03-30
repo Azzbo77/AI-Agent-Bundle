@@ -72,7 +72,7 @@ services:
     restart: unless-stopped
     volumes:
       - redis_data:/data
-    command: redis-server --save 60 1 --appendonly no
+    command: redis-server --save 60 1 --appendonly no --requirepass ${REDIS_PASSWORD}
     deploy:
       resources:
         limits:
@@ -121,7 +121,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin  # Change this!
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_SERVER_ROOT_URL=https://${N8N_HOST}:3000
     volumes:
       - grafana_data:/var/lib/grafana
     deploy:
