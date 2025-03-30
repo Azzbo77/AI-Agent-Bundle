@@ -4,23 +4,23 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 
 ## Features
 
-- Chat Interface: Trigger workflows via chat messages in n8n.
-- AI Model: Uses Ollama with models like llama3.1:8b (~4.7 GB, tool-supporting) for chat responses, with resource limits for stability.
-- Memory: Redis for conversation history, optimized with RDB persistence for faster startup.
-- Vector Storage: Saves embeddings in Qdrant for similarity search or long-term memory.
-- Local Deployment: Runs entirely on your machine with Docker, no cloud dependencies.
-- Secure Access: n8n runs over HTTPS with self-signed certificates (configurable for external access).
-- Logging: Centralized log collection with Loki and Promtail for debugging and monitoring.
-- Visualization: Grafana dashboard for viewing logs in a browser-based interface.
+- **Chat Interface:** Trigger workflows via chat messages in n8n.
+- **AI Model:** Uses Ollama with models like llama3.1:8b (~4.7 GB, tool-supporting) for chat responses, with resource limits for stability.
+- **Memory:** Redis for conversation history, optimised with RDB persistence for faster startup.
+- **Vector Storage:** Saves embeddings in Qdrant for similarity search or long-term memory.
+- **Local Deployment:** Runs entirely on your machine with Docker, no cloud dependencies.
+- **Secure Access:** n8n runs over HTTPS with self-signed certificates (configurable for external access).
+- **Logging:** Centralised log collection with Loki and Promtail for debugging and monitoring.
+- **Visualization:** Grafana dashboard for viewing logs in a browser-based interface.
 
 ## Prerequisites
 
-- Docker: Installed and running (with Docker Compose support).
-- NVIDIA GPU: Optional but recommended for Ollama (requires NVIDIA Container Toolkit).
-- Hardware: At least 16 GB RAM, 8 GB VRAM if using GPU, and 20 GB free disk space.
-- OS: Tested on Linux (e.g., Ubuntu); should work on macOS/Windows with Docker adjustments.
-- OpenSSL: Required to generate self-signed certificates for HTTPS.
-- Ports: Ensure 5678 (n8n), 11434 (ollama), 6379 (redis), 6333-6334 (qdrant), 3100 (loki), and 3000 (grafana) are available.
+- **Docker:** Installed and running (with Docker Compose support).
+- **NVIDIA GPU:** Optional but recommended for Ollama (requires NVIDIA Container Toolkit).
+- **Hardware:** At least 16 GB RAM, 8 GB VRAM if using GPU, and 20 GB free disk space.
+- **OS:** Tested on Linux (e.g., Ubuntu); should work on macOS/Windows with Docker adjustments.
+- **OpenSSL:** Required to generate self-signed certificates for HTTPS.
+- **Ports:** Ensure 5678 (n8n), 11434 (ollama), 6379 (redis), 6333-6334 (qdrant), 3100 (loki), and 3000 (grafana) are available.
 
 ## Setup Instructions
 
@@ -132,13 +132,7 @@ sudo docker compose logs <service>
 - **Dashboard Error:** If “Data is missing a number field,” switch visualization to “Logs.”
 - **Firewall:** Ensure ports 5678, 11434, 6379, 6333-6334, 3100, and 3000 are open:
 ```bash
-sudo ufw allow 5678
-sudo ufw allow 11434
-sudo ufw allow 6379
-sudo ufw allow 6333
-sudo ufw allow 6334
-sudo ufw allow 3100
-sudo ufw allow 3000
+sudo ufw allow <port>
 ```
 
 - **HTTPS Issues:** Verify certificates are in certs/ and paths match .env values.
