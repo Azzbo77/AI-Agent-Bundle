@@ -83,10 +83,10 @@ curl -X PUT http://<your-host-ip>:6333/collections/my_collection \
 **8. Set Up Logging and Visualization**
 - Logging is handled by Loki and Promtail, configured via loki-config.yaml and promtail-config.yaml in the project root.
 - Grafana provides a UI at http://<your-host-ip>:3000:
-  1. Login: admin / <your_secure_password> (set in .env or defaults to admin).
-  2. Add Loki data source: http://loki:3100 → “Save & Test.”
-  3. Explore logs: Query {container=~".+"} or {container="ollama-n8n-compose-ollama-1"} in “Explore.”
-  4. Dashboard: Create “AI Agent Logs”:
+ 1. Login: admin / <your_secure_password> (set in .env or defaults to admin).
+ 2. Add Loki data source: http://loki:3100 → “Save & Test.”
+ 3. Explore logs: Query {container=~".+"} or {container="ollama-n8n-compose-ollama-1"} in “Explore.”
+ 4. Dashboard: Create “AI Agent Logs”:
     - Add visualization → Loki → Query: {container=~".+"}.
     - Set visualization to “Logs.”
     - Save as “AI Agent Logs.”
