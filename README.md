@@ -184,7 +184,7 @@ cat update-stack.log
 - **Grafana:** 
    - Check docker logs ollama-n8n-compose-grafana-1 if login fails.
    - Remove data source: “Data Sources” → Select “Loki” → “Delete” at bottom.
-- **Loki Query Error:** Use {container=~".+"} instead of {container=~".*"}.
+- **Loki Query Error:** Use {container=".+"} instead of {container=".*"}.
 - **Dashboard Error:** If “Data is missing a number field,” switch visualization to “Logs.”
 - **Firewall:** Ensure ports 5678, 11434, 6379, 6333-6334, 3100, and 3000 are open:
 ```bash
