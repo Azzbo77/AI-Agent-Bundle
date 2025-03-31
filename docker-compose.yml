@@ -40,7 +40,9 @@ services:
       start_period: 30s
 
   ollama:
-    image: ollama-with-curl
+    build:  
+      context: .
+      dockerfile: Dockerfile.ollama
     restart: unless-stopped
     ports:
       - "11434:11434"
@@ -89,7 +91,9 @@ services:
       - ai-net
 
   qdrant:
-    image: qdrant-with-curl
+    build:  
+      context: .
+      dockerfile: Dockerfile.qdrant
     restart: unless-stopped
     volumes:
       - qdrant_data:/qdrant/storage
@@ -178,11 +182,11 @@ services:
     image: containrrr/watchtower:latest
     restart: unless-stopped
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Allows Watchtower to control Docker
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - WATCHTOWER_CLEANUP=true  # Removes old images after updating
-      - WATCHTOWER_SCHEDULE=0 0 4 * * *  # Runs daily at 4 AM (cron syntax)
-      - WATCHTOWER_INCLUDE_STOPPED=false  # Only updates running containers
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_SCHEDULE=0 0 4 * * *
+      - WATCHTOWER_INCLUDE_STOPPED=false
 
 volumes:
   n8n_data:

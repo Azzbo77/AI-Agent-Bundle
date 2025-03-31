@@ -12,6 +12,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 - **Secure Access:** n8n runs over HTTPS with self-signed certificates (configurable for external access).
 - **Logging:** Centralised log collection with Loki and Promtail for debugging and monitoring.
 - **Visualization:** Grafana dashboard for viewing logs in a browser-based interface.
+- **Auto-Updates:** Keeps all components (n8n, Ollama, Qdrant, etc.) updated automatically via a scheduled script.
 
 ## Prerequisites
 
@@ -21,6 +22,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 - **OS:** Tested on Linux (e.g., Ubuntu); should work on macOS/Windows with Docker adjustments.
 - **OpenSSL:** Required to generate self-signed certificates for HTTPS.
 - **Ports:** Ensure 5678 (n8n), 11434 (ollama), 6379 (redis), 6333-6334 (qdrant), 3100 (loki), and 3000 (grafana) are available.
+- **Cron:** For scheduling auto-updates (Linux/macOS; use Task Scheduler on Windows).
 
 ## Setup Instructions
 
@@ -89,7 +91,57 @@ curl -X PUT http://<your-host-ip>:6333/collections/my_collection \
      - Set visualization to “Logs.”
      - Save as “AI Agent Logs.”
 
-**9. Access n8n**
+**9. Set Up Auto-Updates**
+- The stack auto-updates daily using a script:
+  1. Ensure Dockerfile.ollama and Dockerfile.qdrant are in the project root:
+ ```Dockerfile 
+# Dockerfile.ollama
+FROM ollama/ollama
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+```
+
+```Dockerfile
+# Dockerfile.qdrant
+FROM qdrant/qdrant:latest
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+```
+ 2. The update-stack.sh script is included:
+ ```bash
+ #!/bin/bash
+cd ~/ollama-n8n-compose
+
+# Check volumes
+docker volume inspect ollama-n8n-compose_n8n_data ollama-n8n-compose_ollama_data ollama-n8n-compose_redis_data ollama-n8n-compose_qdrant_data ollama-n8n-compose_grafana_data ollama-n8n-compose_loki_data || {
+  echo "Error: Missing volumes. Check your setup!"
+  exit 1
+}
+
+# Pull public images
+docker compose pull
+
+# Rebuild custom images
+docker compose build --pull ollama qdrant
+
+# Restart all services
+docker compose up -d
+
+# Clean up
+docker image prune -f
+```
+
+3. Make it executable:
+```bash
+chmod +x update-stack.sh
+```
+4. Schedule with cron (e.g., 3 AM local time; adjust for your timezone):
+```bash
+crontab -e
+# For UTC: 0 3 * * * /path/to/AI-Agent-Bundle/update-stack.sh >> update-stack.log 2>&1
+# For EST (UTC-5): 0 8 * * * /path/to/AI-Agent-Bundle/update-stack.sh >> update-stack.log 2>&1
+```
+- Replace /path/to/AI-Agent-Bundle with your repo path.
+
+**10. Access n8n**
 - Open your browser: https://<your-host-ip>:5678
 - Accept the self-signed certificate warning.
 - Set up your first workflow (see below).
@@ -124,6 +176,10 @@ Test by sending "hello" in the n8n chat interface.
 - **Check Logs:**
 ```bash
 sudo docker compose logs <service>
+```
+**Update Failures:** Check update-stack.log if cron runs fail:
+```bash
+cat update-stack.log
 ```
 - **Grafana:** 
    - Check docker logs ollama-n8n-compose-grafana-1 if login fails.
