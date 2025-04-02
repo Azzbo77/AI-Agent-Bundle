@@ -30,8 +30,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.5"
-          memory: "512M"
+          cpus: "1.0"
+          memory: "1G"
     healthcheck:
       test: ["CMD", "nc", "-z", "127.0.0.1", "5678"]
       interval: 10s
@@ -49,8 +49,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "4.0"
-          memory: "8g"
+          cpus: "6.0"
+          memory: "12g"
         reservations:
           devices:
             - driver: nvidia
