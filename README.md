@@ -27,7 +27,7 @@ This project sets up a local, self-hosted AI chat system using n8n for workflow 
 ## Setup Instructions
 
 **1. Clone the Repository**
-` ``bash
+```bash
 git clone https://github.com/Azzbo77/AI-Agent-Bundle
 cd AI-Agent-Bundle
 ```
